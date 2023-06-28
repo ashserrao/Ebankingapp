@@ -25,9 +25,10 @@ public class Masteruser {
     private boolean user_stat;
     private boolean kyc_stat;
 
+    // foreign key coding
 //    One to one mapping user ID
-    @OneToOne(mappedBy = "master_user", cascade = CascadeType.ALL)
-    private Kycdetails kyc_details;
+//    @OneToOne(mappedBy = "master_user", cascade = CascadeType.ALL)
+//    private Kycdetails kyc_details;
 
     //Getter and setter methods
 

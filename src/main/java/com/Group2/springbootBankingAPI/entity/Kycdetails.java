@@ -8,17 +8,20 @@ public class Kycdetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int kyc_id;
+    private int master_user_id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "master_user_id", referencedColumnName = "user_id")
-    private Masteruser master_user;
+    // foreign key coding
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "master_user_id", referencedColumnName = "user_id")
+//    private Masteruser master_user;
     private String pan_no;
     private String aadhar_no;
     @Column(nullable = true, length = 64)
     private String cus_photo;
 
-    //Getter and setter methods
 
+
+    //Getter and setter methods
 
     public int getKyc_id() {
         return kyc_id;
@@ -28,12 +31,12 @@ public class Kycdetails {
         this.kyc_id = kyc_id;
     }
 
-    public Masteruser getMaster_user() {
-        return master_user;
+    public int getMaster_user_id() {
+        return master_user_id;
     }
 
-    public void setMaster_user(Masteruser master_user) {
-        this.master_user = master_user;
+    public void setMaster_user_id(int master_user_id) {
+        this.master_user_id = master_user_id;
     }
 
     public String getPan_no() {
