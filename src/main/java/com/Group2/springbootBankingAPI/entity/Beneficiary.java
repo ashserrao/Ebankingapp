@@ -15,7 +15,7 @@ public class Beneficiary
     private String beneficiary_name;
     private String bank_name;
     private String beneficiary_accno;
-    private int max_limit;
+    private String max_limit;
 
     @OneToOne
     @JsonIgnore

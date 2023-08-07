@@ -3,10 +3,13 @@ package com.Group2.springbootBankingAPI.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "User_Login")
 public class UserLogin
 {
@@ -26,4 +29,7 @@ public class UserLogin
     @OneToOne
   //  @JsonIgnore
     private  Masteruser masteruser;
+
+   @OneToOne
+    private Beneficiary beneficiary;
 }

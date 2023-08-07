@@ -5,9 +5,12 @@ import com.Group2.springbootBankingAPI.entity.Kycdetails;
 import com.Group2.springbootBankingAPI.entity.UserLogin;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToOne;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MasteruserDto
 {
     private Long user_id;

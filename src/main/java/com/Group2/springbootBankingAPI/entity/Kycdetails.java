@@ -1,5 +1,6 @@
 package com.Group2.springbootBankingAPI.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,13 +15,8 @@ public class Kycdetails {
     private String aadhar_no;
     @Column(nullable = true, length = 64)
     private String cus_photo;
-
-
-
-
-
-
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = {CascadeType.ALL})
     private  Masteruser masteruser;
 
 

@@ -5,6 +5,7 @@ import com.Group2.springbootBankingAPI.filter.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,17 +19,26 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    public static final String[] PUBLIC_URLS={
+            "/v3/api-docs/**","/v2/api-docs/**","/user/userRegistration",
+            "/user/authenticate",
+            "/user/imageServe/{imageName}",
+            "/swagger-resources/**","/swagger-ui/**","/webjars/**"
+    };
 
    @Autowired
     private JwtAuthFilter authFilter;
 
     @Bean
-//    // for authentication
+    // for authentication
    public UserDetailsService userDetailsService() {
 
        return new UserLoginDetailsService();
@@ -38,7 +48,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/userRegistration","/user/authenticate").permitAll()
+                .requestMatchers(PUBLIC_URLS).permitAll()
+
                 .and()
                 .authorizeHttpRequests().requestMatchers("/user/**")
                 .authenticated().and()

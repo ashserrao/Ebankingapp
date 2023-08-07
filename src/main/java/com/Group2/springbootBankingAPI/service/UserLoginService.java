@@ -1,9 +1,14 @@
 package com.Group2.springbootBankingAPI.service;
 
 import com.Group2.springbootBankingAPI.dto.MasteruserDto;
+import com.Group2.springbootBankingAPI.entity.Beneficiary;
+import com.Group2.springbootBankingAPI.entity.Kycdetails;
 import com.Group2.springbootBankingAPI.entity.Masteruser;
 import com.Group2.springbootBankingAPI.entity.UserLogin;
+import com.Group2.springbootBankingAPI.exceptions.ResourceNotFoundException;
 import com.Group2.springbootBankingAPI.repository.BankingRepo;
+import com.Group2.springbootBankingAPI.repository.BeneficiaryRepository;
+import com.Group2.springbootBankingAPI.repository.KycRepo;
 import com.Group2.springbootBankingAPI.repository.UserLoginRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +28,13 @@ public class UserLoginService
     UserLoginRepository userLoginRepository;
 
     @Autowired
-    BankingRepo bankingRepo;
+    private   BeneficiaryRepository beneficiaryRepository;
+
+    @Autowired
+    private  BankingRepo bankingRepo;
+
+    @Autowired
+    private KycRepo kycRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -34,28 +45,35 @@ public class UserLoginService
     @Autowired
     private BankingRepo accountRepository;
 
-    public String LoginRegistration(UserLogin userLogin)
-    {
+
+
+    public UserLogin LoginRegistration(UserLogin userLogin) {
         // Generate account number
         String accountNumber = generateAccountNumber();
+        //Create new Kyc Details entity
+        Kycdetails kycdetails = new Kycdetails();
 
-        // Save account number in the other table
-        MasteruserDto masteruserDto = new MasteruserDto();
-        masteruserDto.setAccount_Number(accountNumber);
 
-        Masteruser masteruser= this.modelMapper.map(masteruserDto,Masteruser.class);
-        accountRepository.save(masteruser);
+        Masteruser masteruser = new Masteruser();
+        masteruser.setAccount_Number(accountNumber);
+        kycdetails.setMasteruser(masteruser);
 
+        Beneficiary beneficiary = new Beneficiary();
+
+
+        userLogin.setBeneficiary(beneficiary);
+        userLogin.setMasteruser(masteruser);
         userLogin.setPassword(passwordEncoder.encode(userLogin.getPassword()));
-        //userLogin.setMasteruser(masteruser1);
-        UserLogin userLogin1 =  userLoginRepository.save(userLogin);
 
 
+        beneficiaryRepository.save(beneficiary);
+        kycRepo.save(kycdetails);
+        accountRepository.save(masteruser);
+        UserLogin createdUserLogin =  userLoginRepository.save(userLogin);
 
-
-
-        return "Registration successful!";
+        return createdUserLogin;
     }
+
 
     public List<UserLogin> getAllLoginUsers()
    {
@@ -66,7 +84,7 @@ public class UserLoginService
     public UserLogin getUserByUsername(String username)
     {
         UserLogin userLogin = userLoginRepository.findByEmail(username).orElseThrow(
-                () -> new RuntimeException("User not found"));
+                ()->new ResourceNotFoundException("User","username",username));
         return userLogin;
     }
 
