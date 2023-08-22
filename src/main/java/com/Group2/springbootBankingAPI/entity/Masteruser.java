@@ -1,65 +1,41 @@
 package com.Group2.springbootBankingAPI.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "Table2")
-public class MasterUser {
+@Table(name = "master_user")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Masteruser {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int user_id;
-    @Column(name="fName")
-    private String first_name;
-    private String last_name;
-    private String dob;
-    private String permanent_add;
-    private String residential_add;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long user_id;
 
-    public int getUser_id() {
-        return user_id;
-    }
+    private String account_Number;
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
+    private double current_Balance;
 
-    public String getFirst_name() {
-        return first_name;
-    }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
 
-    public String getLast_name() {
-        return last_name;
-    }
+ @OneToOne(mappedBy = "masteruser",cascade = CascadeType.ALL)
+   private Kycdetails kycdetails;
+ @JsonIgnore
+ @OneToOne(mappedBy ="masteruser", cascade=CascadeType.ALL)
+ private UserLogin userLogin;
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
+ @OneToMany (mappedBy="masteruser",cascade=CascadeType.ALL)
+ private List<Transactions> transactions = new ArrayList<>();
 
-    public String getDob() {
-        return dob;
-    }
 
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
 
-    public String getPermanent_add() {
-        return permanent_add;
-    }
 
-    public void setPermanent_add(String permanent_add) {
-        this.permanent_add = permanent_add;
-    }
 
-    public String getResidential_add() {
-        return residential_add;
-    }
-
-    public void setResidential_add(String residential_add) {
-        this.residential_add = residential_add;
-    }
 }

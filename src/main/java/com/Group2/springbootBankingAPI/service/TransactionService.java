@@ -32,28 +32,6 @@ public class TransactionService
         String dateString = currentDate.format(formatter);
         return dateString;
     }
-//    public  Masteruser updateCreditTransactionsByuserId(Transactions transactions, Integer userId)
-//    {
-//
-//
-//             Masteruser masteruser= this.bankingRepo.findById(userId).orElseThrow(
-//                                       () -> new RuntimeException("User not found"));
-//
-//              Transactions transactions1 = new Transactions();
-//                transactions1.setDateOfLastTransaction(getLocalDate());
-//                transactions1.setCreditAmount(transactions.getCreditAmount());
-//                masteruser.setCurrent_Balance(masteruser.getCurrent_Balance()+transactions.getCreditAmount());
-//                transactions1.setLastTransactionDetails
-//                        ("₹"+transactions.getCreditAmount()+"  is credited to Account No. "
-//                                +masteruser.getAccount_Number());
-//                transactions1.setMasteruser(masteruser);
-//              Transactions transactions2 =  transactionRepository.save(transactions1);
-//              List<Transactions> transactionsList = new ArrayList<>();
-//              transactionsList.add(transactions2);
-//              masteruser.setTransactions(transactionsList);
-//              return   bankingRepo.save(masteruser);
-//
-//    }
 
 
     public Masteruser updateCreditTransactionsByuserId(Transactions transactions, Integer userId) {
@@ -98,10 +76,17 @@ public class TransactionService
                 ("₹"+transactions.getDebitAmount()+"  is debited from Account No. "
                         +masteruser.getAccount_Number());
         transactions1.setMasteruser(masteruser);
-        Transactions transactions2 =  transactionRepository.save(transactions1);
-        List<Transactions> transactionsList = new ArrayList<>();
-        transactionsList.add(transactions2);
+        // Retrieve the existing Transactions array from masteruser
+        List<Transactions> transactionsList = masteruser.getTransactions();
+
+        // Add the newTransaction to the existing array
+        transactionsList.add(transactions1);
+        // Save the newTransaction to the database
+        Transactions savedTransaction = transactionRepository.save(transactions1);
+        // Save the updated transactionsList back to the masteruser
         masteruser.setTransactions(transactionsList);
+
+        // Save the masteruser to the database
         return bankingRepo.save(masteruser);
 
     }
